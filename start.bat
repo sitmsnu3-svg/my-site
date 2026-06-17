@@ -1,0 +1,3 @@
+@echo off
+echo Starting OtakuZone development server...
+npm run dev

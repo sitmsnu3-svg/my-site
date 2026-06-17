@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  username      String         @unique
+  email         String         @unique
+  password      String
+  role          String         @default("ADVENTURER")
+  level         Int            @default(1)
+  xp            Int            @default(0)
+  currency      Int            @default(0) // "Мана"
+  class         String?        // e.g., "Маг", "Воин"
+  guildId       String?
+  guild         Guild?         @relation("GuildMembers", fields: [guildId], references: [id])
+  ledGuilds     Guild[]        @relation("GuildLeader")
+  threads       Thread[]
+  comments      Comment[]
+  transactions  Transaction[]
+  notifications Notification[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Guild {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  leaderId    String
+  leader      User     @relation("GuildLeader", fields: [leaderId], references: [id])
+  members     User[]   @relation("GuildMembers")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  icon        String?
+  slug        String   @unique
+  requireRole String?  // If set, only users with this role can create threads
+  rules       String?  // Rules for this category
+  threads     Thread[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Thread {
+  id             String     @id @default(cuid())
+  title          String
+  content        String
+  authorId       String
+  author         User       @relation(fields: [authorId], references: [id])
+  categoryId     String
+  category       Category   @relation(fields: [categoryId], references: [id])
+  parentId       String?    // For subtopics
+  parent         Thread?    @relation("ThreadReplies", fields: [parentId], references: [id])
+  replies       Thread[]   @relation("ThreadReplies")
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  views          Int        @default(0)
+  currencyReward Int        @default(0)
+  comments       Comment[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  threadId  String
+  thread    Thread   @relation(fields: [threadId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Transaction {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  amount    Int      // positive or negative
+  reason    String   // e.g., "Создание темы", "Награда за лайк"
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
