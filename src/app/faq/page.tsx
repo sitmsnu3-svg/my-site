@@ -72,12 +72,6 @@ const faqItems = [
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
-  const playClickSound = () => {
-    const audio = new Audio('/sounds/sao_click.mp3')
-    audio.volume = 0.3
-    audio.play().catch(() => {})
-  }
-
   return (
     <div className="min-h-screen pt-24 pb-12 px-6">
       <Navbar />
@@ -90,10 +84,7 @@ export default function FAQ() {
           {faqItems.map((item, index) => (
             <Card key={index} hover>
               <motion.button
-                onClick={() => {
-                  setOpenIndex(openIndex === index ? null : index)
-                  playClickSound()
-                }}
+                onClick={() => setOpenIndex(openIndex === index ? null : index)}
                 className="w-full text-left"
               >
                 <div className="flex justify-between items-center">

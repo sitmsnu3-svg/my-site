@@ -30,12 +30,6 @@ export default function RulesPage() {
       .catch(() => setLoading(false))
   }, [])
 
-  const playClickSound = () => {
-    const audio = new Audio('/sounds/sao_click.mp3')
-    audio.volume = 0.3
-    audio.play().catch(() => {})
-  }
-
   return (
     <div className="min-h-screen pt-24 pb-12 px-6">
       <Navbar />

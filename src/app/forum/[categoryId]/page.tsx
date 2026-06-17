@@ -115,7 +115,7 @@ export default function ForumPage() {
           className="mb-8"
         >
           <div className="mb-6">
-            <Link href="/" onMouseDown={playClickSound} className="text-primary-500 hover:underline font-medium">
+            <Link href="/" className="text-primary-500 hover:underline font-medium">
               ← Главная
             </Link>
             <h1 className="text-3xl text-white mt-2 font-bold">{category?.name || 'Категория'}</h1>
@@ -150,7 +150,7 @@ export default function ForumPage() {
                 }
               </div>
             ) : (
-              <Link href="/auth/login" onMouseDown={playClickSound}>
+              <Link href="/auth/login">
                 <Button>Войти для создания темы</Button>
               </Link>
             )}
@@ -207,7 +207,6 @@ export default function ForumPage() {
               <Link
                 key={thread.id}
                 href={`/thread/${thread.id}`}
-                onMouseDown={playClickSound}
               >
                 <Card hover>
                   <div className="flex justify-between items-start">
