@@ -7,12 +7,6 @@ import { useState } from 'react'
 export default function Footer() {
   const [cookieConsent, setCookieConsent] = useState(false)
 
-  const playClickSound = () => {
-    const audio = new Audio('/sounds/sao_click.mp3')
-    audio.volume = 0.3
-    audio.play().catch(() => {})
-  }
-
   return (
     <>
       <footer className="glass-panel border-t border-dark-700/50 mt-auto">
@@ -28,17 +22,17 @@ export default function Footer() {
               <h4 className="text-lg font-semibold text-white mb-4">Навигация</h4>
               <ul className="space-y-2">
                 <li>
-                  <Link href="/" onMouseDown={playClickSound} className="text-slate-400 hover:text-primary-500 transition-colors text-sm">
+                  <Link href="/" className="text-slate-400 hover:text-primary-500 transition-colors text-sm">
                     Главная
                   </Link>
                 </li>
                 <li>
-                  <Link href="/guilds" onMouseDown={playClickSound} className="text-slate-400 hover:text-primary-500 transition-colors text-sm">
+                  <Link href="/guilds" className="text-slate-400 hover:text-primary-500 transition-colors text-sm">
                     Клубы
                   </Link>
                 </li>
                 <li>
-                  <Link href="/faq" onMouseDown={playClickSound} className="text-slate-400 hover:text-primary-500 transition-colors text-sm">
+                  <Link href="/faq" className="text-slate-400 hover:text-primary-500 transition-colors text-sm">
                     FAQ
                   </Link>
                 </li>
@@ -48,12 +42,12 @@ export default function Footer() {
               <h4 className="text-lg font-semibold text-white mb-4">Правовая информация</h4>
               <ul className="space-y-2">
                 <li>
-                  <Link href="/privacy" onMouseDown={playClickSound} className="text-slate-400 hover:text-primary-500 transition-colors text-sm">
+                  <Link href="/privacy" className="text-slate-400 hover:text-primary-500 transition-colors text-sm">
                     Политика конфиденциальности
                   </Link>
                 </li>
                 <li>
-                  <Link href="/data-processing" onMouseDown={playClickSound} className="text-slate-400 hover:text-primary-500 transition-colors text-sm">
+                  <Link href="/data-processing" className="text-slate-400 hover:text-primary-500 transition-colors text-sm">
                     Обработка персональных данных
                   </Link>
                 </li>
@@ -80,7 +74,7 @@ export default function Footer() {
                 <h4 className="text-white font-semibold mb-1">Важная информация</h4>
                 <p className="text-slate-400 text-sm">
                   Мы используем файлы cookie для улучшения работы сайта. Продолжая использовать сайт, вы соглашаетесь с нашей{' '}
-                  <Link href="/privacy" onMouseDown={playClickSound} className="text-primary-500 hover:underline">
+                  <Link href="/privacy" className="text-primary-500 hover:underline">
                     политикой конфиденциальности
                   </Link>
                   .
@@ -93,7 +87,6 @@ export default function Footer() {
                   setCookieConsent(true)
                   localStorage.setItem('cookieConsent', 'true')
                 }}
-                onMouseDown={playClickSound}
                 className="px-6 py-2 btn-gradient rounded-xl text-white font-medium whitespace-nowrap"
               >
                 Я согласен

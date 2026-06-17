@@ -22,12 +22,6 @@ export default function Navbar() {
     }
   }
 
-  const playClickSound = () => {
-    const audio = new Audio('/sounds/sao_click.mp3')
-    audio.volume = 0.3
-    audio.play().catch(() => {})
-  }
-
   return (
     <motion.nav
       initial={{ y: -100 }}
@@ -35,7 +29,7 @@ export default function Navbar() {
       className="glass-panel fixed top-0 left-0 right-0 z-50 px-6 py-4 border-b border-dark-700/50"
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link href="/" onMouseDown={playClickSound}>
+        <Link href="/">
           <motion.div
             whileHover={{ scale: 1.05 }}
             className="flex items-center gap-2"
@@ -52,21 +46,18 @@ export default function Navbar() {
         <div className="flex items-center gap-8">
           <Link
             href="/"
-            onMouseDown={playClickSound}
             className="text-slate-300 hover:text-white transition-colors font-medium"
           >
             Главная
           </Link>
           <Link
             href="/guilds"
-            onMouseDown={playClickSound}
             className="text-slate-300 hover:text-white transition-colors font-medium"
           >
             Клубы
           </Link>
           <Link
             href="/rules"
-            onMouseDown={playClickSound}
             className="text-slate-300 hover:text-white transition-colors font-medium"
           >
             Правила
@@ -91,7 +82,6 @@ export default function Navbar() {
                   setUser(null)
                   window.location.href = '/'
                 }}
-                onMouseDown={playClickSound}
                 className="px-4 py-2 bg-dark-800 border border-dark-700 rounded-xl text-slate-300 hover:bg-dark-700 hover:border-dark-600 transition-all"
               >
                 Выйти
@@ -101,14 +91,12 @@ export default function Navbar() {
             <div className="flex gap-3">
               <Link
                 href="/auth/login"
-                onMouseDown={playClickSound}
                 className="px-5 py-2.5 bg-dark-800 border border-dark-700 rounded-xl text-slate-300 hover:bg-dark-700 hover:border-dark-600 transition-all font-medium"
               >
                 Войти
               </Link>
               <Link
                 href="/auth/register"
-                onMouseDown={playClickSound}
                 className="px-5 py-2.5 btn-gradient rounded-xl text-white font-medium"
               >
                 Регистрация

@@ -104,12 +104,6 @@ export default function ForumPage() {
     }
   }
 
-  const playClickSound = () => {
-    const audio = new Audio('/sounds/sao_click.mp3')
-    audio.volume = 0.3
-    audio.play().catch(() => {})
-  }
-
   return (
     <div className="min-h-screen pt-24 pb-12 px-6">
       <Navbar />
@@ -150,7 +144,10 @@ export default function ForumPage() {
               </Button>
             ) : user ? (
               <div className="text-yellow-400 text-sm">
-                ⚠️ Для создания тем требуется роль: {category?.requireRole}
+                {category?.requireRole 
+                  ? `⚠️ Для создания тем требуется роль: ${category.requireRole}`
+                  : '⚠️ Для создания тем требуется авторизация'
+                }
               </div>
             ) : (
               <Link href="/auth/login" onMouseDown={playClickSound}>

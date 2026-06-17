@@ -22,12 +22,6 @@ export default function Button({
   type = 'button',
   size = 'md',
 }: ButtonProps) {
-  const playClickSound = () => {
-    const audio = new Audio('/sounds/sao_click.mp3')
-    audio.volume = 0.3
-    audio.play().catch(() => {})
-  }
-
   const variants = {
     primary: 'btn-gradient text-white border-transparent',
     secondary: 'bg-dark-800 border-dark-700 text-slate-200 hover:bg-dark-700 hover:border-dark-600',
@@ -45,10 +39,7 @@ export default function Button({
     <motion.button
       whileHover={{ scale: disabled ? 1 : 1.02 }}
       whileTap={{ scale: disabled ? 1 : 0.98 }}
-      onClick={(e) => {
-        playClickSound()
-        onClick?.()
-      }}
+      onClick={onClick}
       disabled={disabled}
       type={type}
       className={`rounded-xl font-semibold transition-all duration-300 ${variants[variant]} ${sizes[size]} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}

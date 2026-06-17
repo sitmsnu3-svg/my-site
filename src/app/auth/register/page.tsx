@@ -91,7 +91,11 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Button className="w-full" disabled={loading}>
+            <Button 
+              className="w-full" 
+              disabled={loading}
+              type="submit"
+            >
               {loading ? 'Регистрация...' : 'Создать аккаунт'}
             </Button>
           </form>
