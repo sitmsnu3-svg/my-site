@@ -46,11 +46,14 @@ export default function ForumPage() {
     Promise.all([
       fetch(`/api/threads?categoryId=${params.categoryId}`).then(r => r.json()),
       fetch('/api/auth/me').then(r => r.json()).catch(() => null),
+      fetch(`/api/categories/${params.categoryId}`).then(r => r.json()).catch(() => null),
     ])
-      .then(([threadsData, userData]) => {
+      .then(([threadsData, userData, categoryData]) => {
         setThreads(threadsData)
-        if (userData?.id) setUser(userData)
-        if (threadsData.length > 0) {
+        if (userData && userData.id) setUser(userData)
+        if (categoryData) {
+          setCategory(categoryData)
+        } else if (threadsData.length > 0) {
           setCategory(threadsData[0].category)
         }
         setLoading(false)
@@ -59,7 +62,8 @@ export default function ForumPage() {
   }, [params.categoryId])
 
   const canCreateThread = () => {
-    if (!user || !category) return false
+    if (!user) return false
+    if (!category) return false
     if (!category.requireRole) return true
     return user.role === 'ADMIN' || user.role === category.requireRole
   }
