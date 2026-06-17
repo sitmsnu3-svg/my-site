@@ -9,6 +9,7 @@ interface InputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   className?: string
   label?: string
+  required?: boolean
 }
 
 export default function Input({
@@ -18,6 +19,7 @@ export default function Input({
   onChange,
   className = '',
   label,
+  required,
 }: InputProps) {
   return (
     <div className={className}>
@@ -28,6 +30,7 @@ export default function Input({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        required={required}
         className="w-full px-4 py-3 bg-dark-900/50 border border-dark-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300"
       />
     </div>
