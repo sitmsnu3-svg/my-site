@@ -1,8 +1,9 @@
 @echo off
-echo Starting database migration...
-cd /d %~dp0
-npx prisma generate
-npx prisma db push
-npx prisma db seed
+echo Running Prisma migrations for PostgreSQL...
+echo.
+echo Make sure PostgreSQL is running and DATABASE_URL is set in .env
+echo.
+npx prisma migrate dev
+echo.
 echo Migration completed!
 pause

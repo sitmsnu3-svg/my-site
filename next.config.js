@@ -4,6 +4,14 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '2mb',
     },
+    optimizePackageImports: ['@prisma/client'],
+  },
+  output: 'standalone',
+  compress: true,
+  poweredByHeader: false,
+  reactStrictMode: true,
+  images: {
+    unoptimized: true,
   },
 }
 

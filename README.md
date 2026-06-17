@@ -156,15 +156,142 @@ site/
   - Уровень: 50
   - Мана: 2500
 
-## 🚀 Продакшн
+## 🚀 Развертывание на Render
 
-Для продакшн развертывания:
+### Бесплатный тариф Render (256MB RAM, 0.1 CPU)
 
-1. Установите переменные окружения
-2. Запустите миграции: `npx prisma migrate deploy`
-3. Заполните данными: `npx prisma db seed`
-4. Соберите проект: `npm run build`
-5. Запустите: `npm start`
+#### 1. Подготовка проекта
+
+Проект уже оптимизирован для развертывания на Render:
+- `next.config.js` настроен с `output: 'standalone'` для уменьшения размера бандла
+- Добавлен health check endpoint `/api/health` для мониторинга
+- Оптимизированы зависимости и память
+- Настроен PostgreSQL вместо SQLite
+
+#### 2. Создание PostgreSQL базы данных на Render
+
+1. Зайдите на [render.com](https://render.com)
+2. Создайте новый PostgreSQL сервис (бесплатный тариф)
+3. После создания скопируйте **Internal Database URL**
+
+#### 3. Настройка переменных окружения
+
+В настройках вашего Render Web Service добавьте следующие переменные:
+
+```env
+DATABASE_URL=<ваш-postgresql-url-из-шага-2>
+JWT_SECRET=<случайный-секретный-ключ>
+NEXT_PUBLIC_SOCKET_URL=<ваш-домен-на-render>
+NODE_ENV=production
+NEXT_TELEMETRY_DISABLED=1
+```
+
+**Важно**: Замените `<ваш-postgresql-url-из-шага-2>` на скопированный URL из PostgreSQL сервиса.
+
+#### 4. Создание Web Service
+
+1. Подключите ваш репозиторий к Render
+2. Создайте новый **Web Service**
+3. Настройте следующие параметры:
+
+**Build & Deploy:**
+- **Build Command**: `npm install && npm run build`
+- **Start Command**: `npm start`
+
+**Environment:**
+- **Runtime**: Node (выберите последнюю версию)
+- **Region**: Ближайший к вашим пользователям
+
+**Advanced:**
+- **Health Check Path**: `/api/health`
+
+#### 5. Автоматическая конфигурация (опционально)
+
+Создайте файл `render.yaml` в корне проекта для автоматической настройки:
+
+```yaml
+services:
+  - type: web
+    name: otakuzone
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+```
+
+#### 6. Первичная миграция базы данных
+
+После первого деплоя выполните миграции через Render Shell:
+
+```bash
+npx prisma migrate deploy
+npx prisma db seed
+```
+
+Или добавьте в `package.json` скрипт для автоматического запуска:
+
+```json
+"scripts": {
+  "postinstall": "prisma generate",
+  "build": "prisma generate && prisma migrate deploy && next build"
+}
+```
+
+#### 7. Оптимизация для бесплатного тарифа
+
+Проект уже оптимизирован для ограничений бесплатного тарифа:
+- ✅ Стandalone режим для уменьшения памяти
+- ✅ Оптимизация импортов Prisma
+- ✅ Отключена телеметрия Next.js
+- ✅ Сжатие включено
+- ✅ Неоптимизированные изображения (для экономии памяти)
+- ✅ Health check для быстрого пробуждения
+
+#### 8. Мониторинг
+
+- Health check endpoint: `https://ваш-домен.render.com/api/health`
+- Логи доступны в панели Render
+- При проблемах с памятью сайт может "спать" - первый запрос может занять больше времени
+
+## 🚀 Локальная разработка
+
+Для локальной разработки с PostgreSQL:
+
+1. Установите PostgreSQL и создайте базу данных:
+   ```sql
+   CREATE DATABASE otakuzone;
+   ```
+
+2. Настройте `.env` файл:
+   ```env
+   DATABASE_URL="postgresql://user:password@localhost:5432/otakuzone?schema=public"
+   JWT_SECRET="your-super-secret-jwt-key-change-this-in-production"
+   NEXT_PUBLIC_SOCKET_URL="http://localhost:3000"
+   ```
+
+3. Примените миграции:
+   ```bash
+   npx prisma migrate dev --name init
+   ```
+
+4. Заполните демо-данными:
+   ```bash
+   npx prisma db seed
+   ```
+
+5. Запустите сервер:
+   ```bash
+   npm run dev
+   ```
+   или
+   ```bash
+   start.bat
+   ```
 
 ## 📝 Лицензия
 
