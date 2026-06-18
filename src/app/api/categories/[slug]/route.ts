@@ -6,9 +6,17 @@ export async function GET(
   { params }: { params: { slug: string } }
 ) {
   try {
-    const category = await prisma.category.findUnique({
+    // Try to find by slug first, then by id
+    let category = await prisma.category.findUnique({
       where: { slug: params.slug },
     })
+
+    // If not found by slug, try by id
+    if (!category) {
+      category = await prisma.category.findUnique({
+        where: { id: params.slug },
+      })
+    }
 
     if (!category) {
       return NextResponse.json(
@@ -19,7 +27,7 @@ export async function GET(
 
     return NextResponse.json(category)
   } catch (error) {
-    console.error('Get category by slug error:', error)
+    console.error('Get category error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
