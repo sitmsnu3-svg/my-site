@@ -6,12 +6,17 @@ export async function GET(request: NextRequest) {
   try {
     const token = request.cookies.get('token')?.value
     
+    console.log('Admin stats API - Token:', token ? 'exists' : 'missing')
+    
     if (!token) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const decoded = verifyToken(token)
+    console.log('Admin stats API - Decoded:', decoded)
+    
     if (!decoded || decoded.role !== 'ADMIN') {
+      console.log('Admin stats API - Role check failed:', decoded?.role)
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
