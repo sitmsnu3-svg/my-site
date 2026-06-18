@@ -11,6 +11,11 @@ const adminRoutes = ['/admin']
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  // Skip middleware for API routes entirely
+  if (pathname.startsWith('/api')) {
+    return NextResponse.next()
+  }
+
   // Check if route requires authentication
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route))
   
@@ -47,8 +52,7 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - public folder
-     * - API routes (they handle their own authentication)
      */
-    '/((?!_next/static|_next/image|favicon.ico|public|api).*)',
+    '/((?!_next/static|_next/image|favicon.ico|public).*)',
   ],
 }

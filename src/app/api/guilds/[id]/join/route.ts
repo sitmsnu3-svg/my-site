@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma'
 import { verifyToken } from '@/lib/auth'
 import { canAfford, addCurrency } from '@/lib/economy'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
