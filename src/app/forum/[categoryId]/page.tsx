@@ -44,16 +44,16 @@ export default function ForumPage() {
 
   useEffect(() => {
     Promise.all([
-      fetch(`/api/threads?categoryId=${params.categoryId}`).then(r => r.json()),
+      fetch(`/api/threads?categoryId=${params.categoryId}`).then(r => r.json()).catch(() => []),
       fetch('/api/auth/me').then(r => r.json()).catch(() => null),
       fetch(`/api/categories/${params.categoryId}`).then(r => r.json()).catch(() => null),
     ])
       .then(([threadsData, userData, categoryData]) => {
-        setThreads(threadsData)
+        setThreads(Array.isArray(threadsData) ? threadsData : [])
         if (userData && userData.id) setUser(userData)
         if (categoryData) {
           setCategory(categoryData)
-        } else if (threadsData.length > 0) {
+        } else if (threadsData.length > 0 && threadsData[0].category) {
           setCategory(threadsData[0].category)
         }
         setLoading(false)

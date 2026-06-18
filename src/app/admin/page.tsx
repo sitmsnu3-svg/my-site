@@ -25,7 +25,11 @@ export default function AdminDashboard() {
     fetch('/api/admin/stats')
       .then(r => r.json())
       .then(data => {
-        setStats(data)
+        if (data && typeof data === 'object') {
+          setStats(data)
+        } else {
+          console.error('Expected object but got:', data)
+        }
         setLoading(false)
       })
       .catch(() => setLoading(false))

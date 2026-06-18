@@ -66,6 +66,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (!category) {
+      console.error('Category not found for ID:', categoryId)
       return NextResponse.json(
         { error: 'Category not found' },
         { status: 404 }

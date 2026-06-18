@@ -38,10 +38,18 @@ export default function AdminCategories() {
     fetch('/api/admin/categories')
       .then(r => r.json())
       .then(data => {
-        setCategories(data)
+        if (Array.isArray(data)) {
+          setCategories(data)
+        } else {
+          console.error('Expected array but got:', data)
+          setCategories([])
+        }
         setLoading(false)
       })
-      .catch(() => setLoading(false))
+      .catch(() => {
+        setLoading(false)
+        setCategories([])
+      })
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {

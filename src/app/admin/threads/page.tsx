@@ -26,10 +26,18 @@ export default function AdminThreads() {
     fetch('/api/admin/threads')
       .then(r => r.json())
       .then(data => {
-        setThreads(data)
+        if (Array.isArray(data)) {
+          setThreads(data)
+        } else {
+          console.error('Expected array but got:', data)
+          setThreads([])
+        }
         setLoading(false)
       })
-      .catch(() => setLoading(false))
+      .catch(() => {
+        setLoading(false)
+        setThreads([])
+      })
   }, [])
 
   const handleDelete = async (id: string) => {

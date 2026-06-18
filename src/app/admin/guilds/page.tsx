@@ -21,10 +21,18 @@ export default function AdminGuilds() {
     fetch('/api/admin/guilds')
       .then(r => r.json())
       .then(data => {
-        setGuilds(data)
+        if (Array.isArray(data)) {
+          setGuilds(data)
+        } else {
+          console.error('Expected array but got:', data)
+          setGuilds([])
+        }
         setLoading(false)
       })
-      .catch(() => setLoading(false))
+      .catch(() => {
+        setLoading(false)
+        setGuilds([])
+      })
   }, [])
 
   const handleDelete = async (id: string) => {

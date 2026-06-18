@@ -31,10 +31,18 @@ export default function AdminUsers() {
     fetch('/api/admin/users')
       .then(r => r.json())
       .then(data => {
-        setUsers(data)
+        if (Array.isArray(data)) {
+          setUsers(data)
+        } else {
+          console.error('Expected array but got:', data)
+          setUsers([])
+        }
         setLoading(false)
       })
-      .catch(() => setLoading(false))
+      .catch(() => {
+        setLoading(false)
+        setUsers([])
+      })
   }, [])
 
   const handleUpdateRole = async () => {
