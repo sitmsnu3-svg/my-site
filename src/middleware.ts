@@ -2,11 +2,11 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { verifyToken } from '@/lib/auth'
 
-// Routes that require authentication
-const protectedRoutes = ['/admin', '/api/admin']
+// Routes that require authentication (only frontend pages, not API routes)
+const protectedRoutes = ['/admin']
 
-// Routes that require admin role
-const adminRoutes = ['/admin', '/api/admin']
+// Routes that require admin role (only frontend pages, not API routes)
+const adminRoutes = ['/admin']
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -19,30 +19,20 @@ export function middleware(request: NextRequest) {
 
     if (!token) {
       // Redirect to login for protected routes
-      if (pathname.startsWith('/admin')) {
-        return NextResponse.redirect(new URL('/auth/login', request.url))
-      }
-      // Return 401 for API routes
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.redirect(new URL('/auth/login', request.url))
     }
 
     const payload = verifyToken(token)
 
     if (!payload) {
-      if (pathname.startsWith('/admin')) {
-        return NextResponse.redirect(new URL('/auth/login', request.url))
-      }
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
+      return NextResponse.redirect(new URL('/auth/login', request.url))
     }
 
     // Check if route requires admin role
     const isAdminRoute = adminRoutes.some(route => pathname.startsWith(route))
     
     if (isAdminRoute && payload.role !== 'ADMIN') {
-      if (pathname.startsWith('/admin')) {
-        return NextResponse.redirect(new URL('/', request.url))
-      }
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+      return NextResponse.redirect(new URL('/', request.url))
     }
   }
 
@@ -57,7 +47,8 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - public folder
+     * - API routes (they handle their own authentication)
      */
-    '/((?!_next/static|_next/image|favicon.ico|public).*)',
+    '/((?!_next/static|_next/image|favicon.ico|public|api).*)',
   ],
 }
