@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { verifyToken } from '@/lib/auth'
 import { addXP, addCurrency, canAfford } from '@/lib/economy'
+import { createThreadSchema } from '@/lib/validations'
 
 export async function GET(request: NextRequest) {
   try {
@@ -51,14 +52,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
     }
 
-    const { title, content, categoryId, parentId } = await request.json()
-
-    if (!title || !content || !categoryId) {
+    const body = await request.json()
+    
+    // Validate input
+    const validation = createThreadSchema.safeParse(body)
+    if (!validation.success) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Validation failed', details: validation.error.errors },
         { status: 400 }
       )
     }
+
+    const { title, content, categoryId, parentId } = validation.data
 
     // Get category to check permissions
     const category = await prisma.category.findUnique({

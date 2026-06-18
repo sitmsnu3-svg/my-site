@@ -68,6 +68,11 @@ model Thread {
   views          Int        @default(0)
   currencyReward Int        @default(0)
   comments       Comment[]
+
+  @@index([authorId])
+  @@index([categoryId])
+  @@index([parentId])
+  @@index([createdAt])
 }
 
 model Comment {
@@ -79,6 +84,10 @@ model Comment {
   thread    Thread   @relation(fields: [threadId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([authorId])
+  @@index([threadId])
+  @@index([createdAt])
 }
 
 model Transaction {
@@ -88,6 +97,9 @@ model Transaction {
   amount    Int      // positive or negative
   reason    String   // e.g., "Создание темы", "Награда за лайк"
   createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
 }
 
 model Notification {
@@ -97,4 +109,8 @@ model Notification {
   message   String
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
 }

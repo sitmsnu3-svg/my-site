@@ -2,17 +2,22 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { hashPassword, generateToken } from '@/lib/auth'
 import { addXP, addCurrency } from '@/lib/economy'
+import { registerSchema } from '@/lib/validations'
 
 export async function POST(request: NextRequest) {
   try {
-    const { username, email, password } = await request.json()
-
-    if (!username || !email || !password) {
+    const body = await request.json()
+    
+    // Validate input
+    const validation = registerSchema.safeParse(body)
+    if (!validation.success) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Validation failed', details: validation.error.errors },
         { status: 400 }
       )
     }
+
+    const { username, email, password } = validation.data
 
     const existingUser = await prisma.user.findFirst({
       where: {

@@ -4,8 +4,23 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
+interface User {
+  id: string
+  username: string
+  email: string
+  role: string
+  level: number
+  xp: number
+  currency: number
+  class?: string
+  guild?: {
+    id: string
+    name: string
+  }
+}
+
 export default function Navbar() {
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [notifications, setNotifications] = useState(0)
 
   useEffect(() => {
